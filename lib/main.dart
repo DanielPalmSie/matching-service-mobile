@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import 'auth_provider.dart';
 import 'auth_service.dart';
+import 'features/auth/presentation/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -44,28 +45,43 @@ class AuthGate extends StatelessWidget {
           return const HomeScreen();
         }
 
-        return const LoginRegisterScreen();
+        // Shows the redesigned login screen; successful auth causes AuthGate
+        // to rebuild and reveal the home screen.
+        return const LoginScreen();
       },
     );
   }
 }
 
-class LoginRegisterScreen extends StatelessWidget {
-  const LoginRegisterScreen({super.key});
+class HomeScreen extends StatelessWidget {
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Welcome'),
-          bottom: const TabBar(
-            tabs: [
-              Tab(text: 'Login'),
-              Tab(text: 'Register'),
-            ],
-          ),
+    final auth = context.watch<AuthProvider>();
+
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Home'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.logout),
+            onPressed: auth.logout,
+            tooltip: 'Logout',
+          )
+        ],
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text('Welcome, ${auth.displayName}!'),
+            const SizedBox(height: 12),
+            const Text(
+              'This screen is shown after successful login or registration.',
+              textAlign: TextAlign.center,
+            ),
+          ],
         ),
         body: const TabBarView(
           children: [
