@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../auth_provider.dart';
@@ -77,6 +78,13 @@ class _LoginScreenState extends State<LoginScreen> {
                                       keyboardType: TextInputType.emailAddress,
                                       validator: validateEmail,
                                       textInputAction: TextInputAction.next,
+                                      inputFormatters: const [
+                                        FilteringTextInputFormatter.allow(
+                                          RegExp(r'[a-zA-Z0-9@.\-_]'),
+                                        ),
+                                      ],
+                                      autocorrect: false,
+                                      enableSuggestions: false,
                                     ),
                                     const SizedBox(height: 14),
                                     IconInputField(
@@ -85,6 +93,9 @@ class _LoginScreenState extends State<LoginScreen> {
                                       icon: Icons.lock_outline,
                                       obscureText: true,
                                       validator: validatePassword,
+                                      keyboardType: TextInputType.text,
+                                      autocorrect: false,
+                                      enableSuggestions: false,
                                       textInputAction: TextInputAction.done,
                                     ),
                                     const SizedBox(height: 12),
