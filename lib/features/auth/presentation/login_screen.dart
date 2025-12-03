@@ -26,7 +26,8 @@ class _LoginScreenState extends State<LoginScreen> {
     super.didChangeDependencies();
     final remember = context.read<AuthProvider>().rememberMe;
     if (_rememberMe != remember) {
-      _rememberMe = remember;
+      // Sync the toggle with persisted preference when the provider updates.
+      setState(() => _rememberMe = remember);
     }
   }
 
