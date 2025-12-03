@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 import '../../../auth_provider.dart';
@@ -93,8 +94,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               label: 'Email',
                               icon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
+                              inputFormatters: const [
+                                FilteringTextInputFormatter.allow(
+                                  RegExp(r'[a-zA-Z0-9@.\-_]'),
+                                ),
+                              ],
                               validator: validateEmail,
                               textInputAction: TextInputAction.next,
+                              autocorrect: false,
+                              enableSuggestions: false,
                             ),
                             const SizedBox(height: 12),
                             IconInputField(
