@@ -65,12 +65,6 @@ class _LoginScreenState extends State<LoginScreen> {
                           return Column(
                             mainAxisSize: MainAxisSize.min,
                             children: [
-                              const CircleAvatar(
-                                radius: 36,
-                                backgroundColor: Colors.white24,
-                                child: Icon(Icons.person_outline, color: Colors.white70, size: 40),
-                              ),
-                              const SizedBox(height: 20),
                               Form(
                                 key: _formKey,
                                 child: Column(
