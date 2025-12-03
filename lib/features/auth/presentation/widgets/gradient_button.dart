@@ -12,11 +12,11 @@ class AppGradientButton extends StatelessWidget {
   final String label;
   final VoidCallback? onPressed;
   final bool loading;
-  final Gradient? gradient;
+  final LinearGradient? gradient;
 
   @override
   Widget build(BuildContext context) {
-    final effectiveGradient = gradient ??
+    final LinearGradient effectiveGradient = gradient ??
         const LinearGradient(
           colors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
           begin: Alignment.centerLeft,
