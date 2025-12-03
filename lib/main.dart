@@ -20,7 +20,13 @@ class MyApp extends StatelessWidget {
       create: (_) => AuthProvider(AuthService())..initialize(),
       child: MaterialApp(
         title: 'Matching App',
-        theme: ThemeData(primarySwatch: Colors.indigo),
+        theme: ThemeData(
+          colorScheme: ColorScheme.fromSeed(
+            seedColor: Colors.grey.shade700,
+            brightness: Brightness.dark,
+          ),
+          scaffoldBackgroundColor: Colors.black,
+        ),
         home: const AuthGate(),
       ),
     );
