@@ -94,7 +94,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               label: 'Email',
                               icon: Icons.email_outlined,
                               keyboardType: TextInputType.emailAddress,
-                              inputFormatters: const [
+                              inputFormatters: [
                                 FilteringTextInputFormatter.allow(
                                   RegExp(r'[a-zA-Z0-9@.\-_]'),
                                 ),
