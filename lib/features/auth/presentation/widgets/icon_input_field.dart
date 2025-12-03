@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 class IconInputField extends StatelessWidget {
   const IconInputField({
@@ -10,6 +11,9 @@ class IconInputField extends StatelessWidget {
     this.keyboardType,
     this.validator,
     this.textInputAction,
+    this.inputFormatters,
+    this.autocorrect = true,
+    this.enableSuggestions = true,
   });
 
   final TextEditingController controller;
@@ -19,6 +23,9 @@ class IconInputField extends StatelessWidget {
   final TextInputType? keyboardType;
   final FormFieldValidator<String>? validator;
   final TextInputAction? textInputAction;
+  final List<TextInputFormatter>? inputFormatters;
+  final bool autocorrect;
+  final bool enableSuggestions;
 
   @override
   Widget build(BuildContext context) {
@@ -29,6 +36,9 @@ class IconInputField extends StatelessWidget {
       keyboardType: keyboardType,
       validator: validator,
       textInputAction: textInputAction,
+      inputFormatters: inputFormatters,
+      autocorrect: autocorrect,
+      enableSuggestions: enableSuggestions,
       style: theme.textTheme.bodyMedium?.copyWith(color: Colors.white),
       decoration: InputDecoration(
         labelText: label,
