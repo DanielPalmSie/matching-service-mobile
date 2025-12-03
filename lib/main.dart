@@ -53,7 +53,7 @@ class AuthGate extends StatelessWidget {
   }
 }
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatelessWidget {d
   const HomeScreen({super.key});
 
   @override
