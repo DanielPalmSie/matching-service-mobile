@@ -78,7 +78,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                       keyboardType: TextInputType.emailAddress,
                                       validator: validateEmail,
                                       textInputAction: TextInputAction.next,
-                                      inputFormatters: const [
+                                      inputFormatters: [
                                         FilteringTextInputFormatter.allow(
                                           RegExp(r'[a-zA-Z0-9@.\-_]'),
                                         ),
