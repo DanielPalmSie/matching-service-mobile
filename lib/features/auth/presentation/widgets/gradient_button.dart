@@ -18,7 +18,7 @@ class AppGradientButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final LinearGradient effectiveGradient = gradient ??
         const LinearGradient(
-          colors: [Color(0xFF8E2DE2), Color(0xFF4A00E0)],
+          colors: [Color(0xFF2A2A2A), Color(0xFF5A5A5A)],
           begin: Alignment.centerLeft,
           end: Alignment.centerRight,
         );
