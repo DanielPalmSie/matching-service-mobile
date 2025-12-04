@@ -17,14 +17,12 @@ class RegisterScreen extends StatefulWidget {
 
 class _RegisterScreenState extends State<RegisterScreen> {
   final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmController = TextEditingController();
 
   @override
   void dispose() {
-    _nameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
     _confirmController.dispose();
@@ -76,19 +74,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               textAlign: TextAlign.center,
                             ),
                             const SizedBox(height: 18),
-                            IconInputField(
-                              controller: _nameController,
-                              label: 'Name',
-                              icon: Icons.person_outline,
-                              validator: (value) {
-                                if (value == null || value.trim().isEmpty) {
-                                  return 'Name is required';
-                                }
-                                return null;
-                              },
-                              textInputAction: TextInputAction.next,
-                            ),
-                            const SizedBox(height: 12),
                             IconInputField(
                               controller: _emailController,
                               label: 'Email',
@@ -167,13 +152,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
   Future<void> _submit(BuildContext context) async {
     if (!(_formKey.currentState?.validate() ?? false)) return;
     final auth = context.read<AuthProvider>();
-    await auth.register(
-      name: _nameController.text.trim(),
+    final success = await auth.register(
       email: _emailController.text.trim(),
       password: _passwordController.text,
     );
     if (!mounted) return;
-    if (auth.isAuthenticated) {
+    if (success) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Registration successful. Please log in.')),
+      );
       Navigator.of(context).pop();
     }
   }
