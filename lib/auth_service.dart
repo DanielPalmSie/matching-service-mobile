@@ -8,7 +8,7 @@ class AuthService {
   AuthService({http.Client? client, this.baseUrl = _defaultBaseUrl})
       : _client = client ?? http.Client();
 
-  static const String _defaultBaseUrl = 'https://example.com/api';
+  static const String _defaultBaseUrl = 'https://matchinghub.work';
 
   final http.Client _client;
   final String baseUrl;
@@ -18,54 +18,67 @@ class AuthService {
     required String password,
   }) async {
     final response = await _client.post(
-      Uri.parse('$baseUrl/login'),
+      Uri.parse('$baseUrl/api/login'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({'email': email, 'password': password}),
     );
 
-    return _parseResponse(response);
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body) as Map<String, dynamic>;
+      final token = data['token'] as String?;
+      if (token == null || token.isEmpty) {
+        throw const AuthException('Invalid response from server.');
+      }
+      return AuthResult(token: token);
+    }
+
+    if (response.statusCode == 401) {
+      throw const AuthException('Email or password is incorrect');
+    }
+
+    throw AuthException(_extractMessage(response) ?? 'Authentication failed.');
   }
 
-  Future<AuthResult> register({
-    required String name,
+  Future<void> register({
     required String email,
     required String password,
   }) async {
     final response = await _client.post(
-      Uri.parse('$baseUrl/register'),
+      Uri.parse('$baseUrl/api/register'),
       headers: {'Content-Type': 'application/json'},
-      body: jsonEncode({'name': name, 'email': email, 'password': password}),
+      body: jsonEncode({'email': email, 'password': password}),
     );
 
-    return _parseResponse(response);
+    if (response.statusCode == 201) {
+      return;
+    }
+
+    throw AuthException(
+      _extractMessage(response) ?? 'Registration failed. Please try again.',
+    );
   }
 
-  AuthResult _parseResponse(http.Response response) {
-    if (response.statusCode >= 200 && response.statusCode < 300) {
+  String? _extractMessage(http.Response response) {
+    try {
       final data = jsonDecode(response.body) as Map<String, dynamic>;
-      final token = data['token'] as String?;
-      final name = data['name'] as String?;
-      if (token == null || token.isEmpty) {
-        throw const AuthException('Invalid response from server.');
-      }
-      return AuthResult(token: token, name: name ?? '');
-    } else {
-      try {
-        final data = jsonDecode(response.body) as Map<String, dynamic>;
-        final message = data['message'] as String? ?? 'Authentication failed.';
-        throw AuthException(message);
-      } catch (_) {
-        throw const AuthException('Authentication failed.');
-      }
+      return (data['message'] ?? data['error']) as String?;
+    } catch (_) {
+      return null;
     }
+  }
+
+  Map<String, String> buildAuthHeaders(String token) {
+    return {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
   }
 }
 
 class AuthResult {
-  const AuthResult({required this.token, required this.name});
+  const AuthResult({required this.token});
 
   final String token;
-  final String name;
 }
 
 class AuthException implements Exception {
